@@ -2,31 +2,39 @@
     <div>
     <div class="top-row">
       <div class="top part">
-        <img v-bind:src="availableParts.heads[0].src" title="head"/>
-        <button class="prev-selector">&#9668;</button>
-        <button class="next-selector">&#9658;</button>
+      <!-- v-once will evaluvate only once-->
+      <div class="robot-name">
+          {{selectedRobot.title}}
+          <!-- v-if (Element will be removed)/ v-show (display none)-->
+          <span v-if="selectedRobot.onSale" class="sale">Sale!</span>
+      </div>
+        <!-- v-bind:src can be replace with :src-->
+        <!-- v-on:click can be replace with @click-->
+        <img v-bind:src="selectedRobot.src" title="head"/>
+        <button @click="selectPreviousHead()" class="prev-selector">&#9668;</button>
+        <button @click="selectNextHead()" class="next-selector">&#9658;</button>
       </div>
     </div>
     <div class="middle-row">
       <div class="left part">
-        <img v-bind:src="availableParts.arms[0].src" title="left arm"/>
+        <img :src="availableParts.arms[0].src" title="left arm"/>
         <button class="prev-selector">&#9650;</button>
         <button class="next-selector">&#9660;</button>
       </div>
       <div class="center part">
-        <img v-bind:src="availableParts.torsos[0].src" title="left arm"/>
+        <img :src="availableParts.torsos[0].src" title="left arm"/>
         <button class="prev-selector">&#9668;</button>
         <button class="next-selector">&#9658;</button>
       </div>
       <div class="right part">
-        <img v-bind:src="availableParts.arms[0].src" title="left arm"/>
+        <img :src="availableParts.arms[0].src" title="left arm"/>
         <button class="prev-selector">&#9650;</button>
         <button class="next-selector">&#9660;</button>
       </div>
     </div>
     <div class="bottom-row">
       <div class="bottom part">
-        <img v-bind:src="availableParts.bases[0].src" title="left arm"/>
+        <img :src="availableParts.bases[0].src" title="left arm"/>
         <button class="prev-selector">&#9668;</button>
         <button class="next-selector">&#9658;</button>
       </div>
@@ -38,13 +46,43 @@
 
 import availableParts from '../data/parts';
 
+const parts = availableParts.heads;
+
+function getPreviousValidIndex(index, length) {
+  const deprecatedIndex = index - 1;
+  return deprecatedIndex < 0 ? length - 1 : deprecatedIndex;
+}
+function getNextValidIndex(index, length) {
+  const incrementedIndex = index + 1;
+  return incrementedIndex > length - 1 ? 0 : incrementedIndex;
+}
+
 export default {
   name: 'Robotbuilder',
   data() {
-    console.log(availableParts);
     return {
       availableParts,
+      selectedHeadIndex: 0,
     };
+  },
+  computed: {
+    selectedRobot() {
+      return parts[this.selectedHeadIndex];
+    },
+  },
+  methods: {
+    selectNextHead() {
+      this.selectedHeadIndex = getNextValidIndex(
+        this.selectedHeadIndex,
+        parts.length,
+      );
+    },
+    selectPreviousHead() {
+      this.selectedHeadIndex = getPreviousValidIndex(
+        this.selectedHeadIndex,
+        parts.length,
+      );
+    },
   },
 };
 </script>
@@ -139,4 +177,14 @@ export default {
 .right .next-selector {
   right: -3px;
 }
+.robot-name {
+    position: absolute;
+    top: -25px;
+    text-align:  center;
+    width: 100%;
+}
+.sale {
+    color: red;
+}
+
 </style>
