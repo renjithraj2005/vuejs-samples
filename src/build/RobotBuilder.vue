@@ -45,6 +45,7 @@
 <script>
 
 import availableParts from '../data/parts';
+import mixins from './mixin';
 
 const parts = availableParts.heads;
 
@@ -65,6 +66,7 @@ export default {
       selectedHeadIndex: 0,
     };
   },
+  mixins: [mixins],
   computed: {
     selectedRobot() {
       return parts[this.selectedHeadIndex];
@@ -87,7 +89,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .part {
   position: relative;
   width:165px;
