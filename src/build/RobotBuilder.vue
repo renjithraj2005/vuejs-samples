@@ -1,5 +1,23 @@
 <template>
-    <div>
+  <div class="content">
+    <div class="preview">
+      <CollapsibleSection>
+      <div class="preview-content">
+        <div class="top-row">
+          <img :src="selectedRobot.head.src"/>
+        </div>
+        <div class="middle-row">
+          <img :src="selectedRobot.leftArm.src" class="rotate-left"/>
+          <img :src="selectedRobot.torso.src"/>
+          <img :src="selectedRobot.rightArm.src" class="rotate-right"/>
+        </div>
+        <div class="bottom-row">
+          <img :src="selectedRobot.base.src"/>
+        </div>
+      </div>
+      </CollapsibleSection>
+      <button class="add-to-cart" @click="addToCart">Add to Cart</button>
+    </div>
     <div class="top-row">
       <!-- v-once will evaluvate only once-->
       <!-- <div class="robot-name">
@@ -9,23 +27,28 @@
       </div> -->
       <PartSelector
         :parts="availableParts.heads"
-        position="top"/>
+        position="top"
+        @partSelected="part => selectedRobot.head = part"/>
     </div>
     <div class="middle-row">
       <PartSelector
        :parts="availableParts.arms"
-       position="left"/>
+       position="left"
+       @partSelected="part => selectedRobot.leftArm = part"/>
       <PartSelector
        :parts="availableParts.torsos"
-       position="center"/>
+       position="center"
+       @partSelected="part => selectedRobot.torso = part"/>
       <PartSelector
        :parts="availableParts.arms"
-       position="right"/>
+       position="right"
+       @partSelected="part => selectedRobot.rightArm = part"/>
     </div>
     <div class="bottom-row">
       <PartSelector
        :parts="availableParts.bases"
-       position="bottom"/>
+       position="bottom"
+       @partSelected="part => selectedRobot.base = part"/>
     </div>
   </div>
 </template>
@@ -34,14 +57,16 @@
 
 import availableParts from '../data/parts';
 import PartSelector from './PartSelector.vue';
+import CollapsibleSection from '../shared/CollapsibleSection.vue';
 import mixins from './mixin';
 
 export default {
   name: 'Robotbuilder',
-  components: { PartSelector },
+  components: { PartSelector, CollapsibleSection },
   data() {
     return {
       availableParts,
+      cart: [],
       selectedRobot: {
         head: {},
         leftArm: {},
@@ -58,7 +83,15 @@ export default {
     },
   },
   methods: {
-
+    addToCart() {
+      const robot = this.selectedRobot;
+      const cost = robot.head.cost
+        + robot.leftArm.cost
+        + robot.torso.cost
+        + robot.rightArm.cost
+        + robot.base.cost;
+      this.cart.push({ ...robot, ...cost });
+    },
   },
 };
 </script>
@@ -161,6 +194,37 @@ export default {
 }
 .sale {
     color: red;
+}
+
+.preview {
+  position: absolute;
+  top: -20px;
+  right: 0;
+  width: 210px;
+  height: 210px;
+  padding: 5px;
+}
+.preview-content {
+  border: 1px solid #999;
+}
+.preview img {
+  width: 50px;
+  height: 50px;
+}
+.rotate-right {
+  transform: rotate(90deg);
+}
+.rotate-left {
+  transform: rotate(-90deg);
+}
+.content {
+  position: relative;
+}
+.add-to-cart {
+  position: absolute;
+  width: 210px;
+  padding: 3px;
+  font-size: 16px;
 }
 
 </style>
