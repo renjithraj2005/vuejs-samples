@@ -62,6 +62,10 @@ import mixins from './mixin';
 
 export default {
   name: 'Robotbuilder',
+  beforeRouteLeave(to, from, next) {
+    console.log('inside beforeRouteLeave');
+    next(true);
+  },
   components: { PartSelector, CollapsibleSection },
   data() {
     return {

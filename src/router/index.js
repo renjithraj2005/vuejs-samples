@@ -12,6 +12,7 @@ import RobotTorsos from '../parts/RobotTorsos.vue';
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [{
     path: '/',
     name: 'HomePage',
@@ -47,5 +48,9 @@ export default new Router({
     name: 'Parts',
     component: PartInfo,
     props: true,
+    beforeEnter(to, from, next) {
+      const isValid = Number.isInteger(Number(to.params.id));
+      next(isValid);
+    },
   }],
 });
