@@ -16,7 +16,7 @@
         </div>
       </div>
       </CollapsibleSection>
-      <button class="add-to-cart" @click="addToCart">Add to Cart</button>
+      <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
     </div>
     <div class="top-row">
       <!-- v-once will evaluvate only once-->
@@ -91,6 +91,7 @@ export default {
         + robot.rightArm.cost
         + robot.base.cost;
       this.cart.push({ ...robot, ...cost });
+      console.log(`cost ${cost}`);
     },
   },
 };
