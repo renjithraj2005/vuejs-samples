@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import store from './store';
 
 Vue.config.productionTip = false;
 
@@ -12,5 +13,6 @@ new Vue({
     console.log('created');
   },
   router,
+  store,
 });
 // .$mount('#app'); This is required only if the in stance doesn't have el option
