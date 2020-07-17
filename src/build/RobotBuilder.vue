@@ -96,6 +96,7 @@ export default {
         + robot.base.cost;
       this.$store.commit('addRobotToCart', Object.assign(robot, { cost }));
       console.log(`cost ${cost}`);
+      console.log(this.$store);
     },
   },
 };
